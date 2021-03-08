@@ -1,0 +1,55 @@
+<html>
+
+<head>
+  <title>Youtube searcher</title>
+</head>
+
+<body>
+  <h3>
+    Low data consumption youtube player
+  </h3>
+  <div>
+    <form action="." method=GET>
+      <input type="text" value='{{search}}' name='search' placeholder="Search videos">
+      <input type="submit" name="Go!">
+    </form>
+  </div>
+  <div>
+    {% if results: %}
+    Results:
+    {% for result in results: %}
+    <li>
+      ({{ result.duration }} - {{ result.publish_time }})
+      <a href="#" onclick='play(this)' data-suffix="{{ result.url_suffix }}">
+        {{ result.title }}
+      </a>
+    </li>
+    {% endfor %}
+    {% endif %}
+  </div>
+</body>
+<script>
+  function play(element) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      var res = this.responseText;
+      if (this.readyState == 4 && this.status == 200) {
+        console.log(res);
+        if (res == "error") {
+          return false
+        }
+        const audio = `<audio preload="auto" controls="controls">
+                  <source 
+                    src="${res}" type="audio/mp3">
+              </audio>`;
+        element.insertAdjacentHTML('beforeend', audio);
+      }
+    };
+    xhttp.open("POST", "/play");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    var send = JSON.stringify({ 'suffix': element.dataset.suffix })
+    xhttp.send(send);
+  }
+</script>
+
+</html>
