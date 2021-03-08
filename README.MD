@@ -1,4 +1,4 @@
-## youtube downloader
+## Youtube downloader
 
 This script will create a very simple webpage where you can search for videos in youtube (youtube-search lib) and play / download them (youtube-dl) created with Flask.
 
